@@ -1,7 +1,7 @@
 import requests
 import json
 import time
-import sys
+from sys import argv
 from pprint import pprint
  
 #----------------------------------------------------------------------
@@ -15,11 +15,7 @@ def login(username, password):
     #POST with user/pwd
     client = requests.session()
     client.headers=headers
-
     r = client.post('http://www.reddit.com/api/login', data=UP)
- 
-    #gets and saves the modhash
-    j = json.loads(r.text)
     client.user = username
     def name():
         return '{}\'s client'.format(username)
@@ -49,16 +45,37 @@ def subredditInfo(client, limit, sr='askreddit',
     #or list of stories
     else:
         stories = []
-        count = 0
         for story in j['data']['children']:
-            stories.append(story)
-            count += 1
+            stories.append(story['data']['title'])
  
         return stories
- 
-client = login('username', 'passwd')
-j = subredditInfo(client, limit=1)
-pprint(j)
+
+
+def userSubreddit(client, limit, return_json=False, **kwargs):
+
+    parameters = {'limit': limit,}
+    parameters.update(kwargs)
+    r = client.get(url, params=parameters)
+    j = json.loads(r.text)
+
+    if return_json:
+        return j
+    else:
+        subreddits = []
+        for subreddit in j['data']['children']:
+            subreddits.append(subreddit['data']['title'])
+
+        return subreddits
+
+
+def main():
+    script, username, password = argv
+    client = login(username, password)
+    # j = subredditInfo(client, limit=5)
+    j = userSubreddit(client, limit=5)
+    pprint(j)
+if  __name__ =='__main__':main()
+
 
 
 
