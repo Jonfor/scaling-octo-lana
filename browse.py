@@ -3,6 +3,7 @@ import json
 import time
 from sys import argv
 from pprint import pprint
+import getpass
  
 #----------------------------------------------------------------------
 def login(username, password):
@@ -55,6 +56,7 @@ def userSubreddit(client, limit, return_json=False, **kwargs):
 
     parameters = {'limit': limit,}
     parameters.update(kwargs)
+    url = r'http://www.reddit.com/.json?feed=40c5e9d6d8f68a9b0221956955a94a12874a4729&user=Chaosruiner'
     r = client.get(url, params=parameters)
     j = json.loads(r.text)
 
@@ -63,16 +65,18 @@ def userSubreddit(client, limit, return_json=False, **kwargs):
     else:
         subreddits = []
         for subreddit in j['data']['children']:
-            subreddits.append(subreddit['data']['title'])
+            subreddits.append(subreddit['data']['permalink'])
 
         return subreddits
 
 
 def main():
-    script, username, password = argv
+    print 'Please enter your username'
+    username = raw_input("-->")
+    password = getpass.getpass()
     client = login(username, password)
     # j = subredditInfo(client, limit=5)
-    j = userSubreddit(client, limit=5)
+    j = userSubreddit(client, limit=10)
     pprint(j)
 if  __name__ =='__main__':main()
 
