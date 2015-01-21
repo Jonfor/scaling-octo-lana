@@ -1,0 +1,14 @@
+html {
+  height:400px;
+}
+body {
+  height:800px;
+}
+
+#selector nav {
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  width: 20%;
+  background: #008CBA;
+}

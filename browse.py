@@ -14,8 +14,8 @@ def login(username, password):
     headers = {'user-agent': '/u/Chaosruiner\'s API python bot', }
     #POST with user/pwd
     client = requests.session()
-    client.headers=headers
-    r = client.post('http://www.reddit.com/api/login', data=UP)
+    client.headers = headers
+    r = client.post('http://www.reddit.com/api/login', data = UP)
 
     # Print out error codes on attempting login
     j = json.loads(r._content)
@@ -32,7 +32,7 @@ def login(username, password):
 
     return client
 
-def usersubreddit(client, limit, return_json=False, **kwargs):
+def usersubreddit(client, limit, return_json = True, **kwargs):
 
     parameters = {'limit': limit,}
     parameters.update(kwargs)
@@ -56,7 +56,7 @@ def main():
     username = raw_input("-->")
     password = getpass.getpass()
     client = login(username, password)
-    j = usersubreddit(client, limit=10)
+    j = usersubreddit(client, limit = 10)
     pprint(j)
 if  __name__ =='__main__':main()
 
